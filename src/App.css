@@ -1,67 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme System CSS Custom Properties */
 :root {
-  background-color: #000;
-  --color-text: #fff;
+  /* Base theme colors - HSL values for better manipulation */
+  --primary-hsl: 220 100% 50%;
+  --primary-light-hsl: 220 100% 70%;
+  --primary-dark-hsl: 220 100% 30%;
+  --secondary-hsl: 280 60% 60%;
+  --accent-hsl: 45 100% 60%;
+  
+  /* Light theme colors */
+  --background-hsl: 0 0% 100%;
+  --surface-hsl: 0 0% 98%;
+  --text-hsl: 0 0% 10%;
+  --text-secondary-hsl: 0 0% 40%;
+  
+  /* Additional semantic colors for comprehensive theming */
+  --border-hsl: 0 0% 90%;
+  --muted-hsl: 0 0% 96%;
+  --destructive-hsl: 0 84% 60%;
+  --warning-hsl: 38 92% 50%;
+  --success-hsl: 142 76% 36%;
+  --info-hsl: 199 89% 48%;
+  
+  /* Semantic color mappings using HSL custom properties */
+  --color-primary: hsl(var(--primary-hsl));
+  --color-primary-light: hsl(var(--primary-light-hsl));
+  --color-primary-dark: hsl(var(--primary-dark-hsl));
+  --color-secondary: hsl(var(--secondary-hsl));
+  --color-accent: hsl(var(--accent-hsl));
+  --color-background: hsl(var(--background-hsl));
+  --color-surface: hsl(var(--surface-hsl));
+  --color-text: hsl(var(--text-hsl));
+  --color-text-secondary: hsl(var(--text-secondary-hsl));
+  --color-border: hsl(var(--border-hsl));
+  --color-muted: hsl(var(--muted-hsl));
+  --color-destructive: hsl(var(--destructive-hsl));
+  --color-warning: hsl(var(--warning-hsl));
+  --color-success: hsl(var(--success-hsl));
+  --color-info: hsl(var(--info-hsl));
+  
+  /* Theme transition duration */
+  --theme-transition-duration: 300ms;
+  
+  /* Shadow and opacity values that adapt to theme */
+  --shadow-color: 0 0% 0%;
+  --shadow-opacity: 0.1;
+  --overlay-opacity: 0.5;
 }
 
-.Background {
-  position: fixed;
-  background: radial-gradient(
-    71.43% 62.3% at 46.43% 36.43%,
-    rgba(18, 229, 229, 0) 15%,
-    rgba(239, 155, 255, 0.3) 56.35%,
-    #ff6448 100%
-  );
-  box-shadow: 0px 12.93px 28.74px 0px #ffd28db2 inset;
-  border-radius: 50%;
-  width: 200vw;
-  height: 200vw;
-  top: -60vw;
-  left: -14.27vw;
-  transform: rotate(15.25deg);
+/* Dark theme overrides */
+[data-theme="dark"] {
+  /* Dark theme background and surface colors */
+  --background-hsl: 222 84% 5%;
+  --surface-hsl: 222 84% 8%;
+  --text-hsl: 210 40% 98%;
+  --text-secondary-hsl: 215 20% 65%;
+  --border-hsl: 217 32% 17%;
+  --muted-hsl: 217 32% 12%;
+  
+  /* Adjust semantic colors for dark theme */
+  --destructive-hsl: 0 62% 50%;
+  --warning-hsl: 38 92% 50%;
+  --success-hsl: 142 76% 36%;
+  --info-hsl: 199 89% 48%;
+  
+  /* Dark theme shadow adjustments */
+  --shadow-color: 0 0% 0%;
+  --shadow-opacity: 0.3;
+  --overlay-opacity: 0.7;
 }
 
-.App {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+/* System theme detection - automatically apply dark theme based on OS preference */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --background-hsl: 222 84% 5%;
+    --surface-hsl: 222 84% 8%;
+    --text-hsl: 210 40% 98%;
+    --text-secondary-hsl: 215 20% 65%;
+    --border-hsl: 217 32% 17%;
+    --muted-hsl: 217 32% 12%;
+    --shadow-color: 0 0% 0%;
+    --shadow-opacity: 0.3;
+    --overlay-opacity: 0.7;
+  }
 }
 
-text {
-  color: var(--color-text);
+/* Theme transition animations */
+* {
+  transition: background-color var(--theme-transition-duration) ease,
+              border-color var(--theme-transition-duration) ease,
+              color var(--theme-transition-duration) ease;
 }
 
-.Banner {
-  flex: 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --theme-transition-duration: 0ms;
+  }
+  
+  * {
+    transition: none !important;
+  }
 }
 
-.Logo {
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-hsl: 0 0% 0%;
+    --shadow-opacity: 1;
+  }
+  
+  [data-theme="dark"] {
+    --border-hsl: 0 0% 100%;
+    --text-hsl: 0 0% 100%;
+    --background-hsl: 0 0% 0%;
+  }
 }
 
-.Logo--react {
-  width: 100px;
-  height: 100px;
-  animation: Logo--spin infinite 20s linear;
+/* Accessibility improvements */
+[data-reduced-motion="true"] * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }
 
-.Logo--lynx {
-  width: 100px;
-  height: 100px;
-  animation: Logo--shake infinite 0.5s ease;
+[data-high-contrast="true"] {
+  --shadow-opacity: 1;
 }
 
-@keyframes Logo--spin {
+/* Focus indicators for keyboard navigation */
+.focus-visible,
+*:focus-visible {
+  outline: 2px solid hsl(var(--primary-hsl));
+  outline-offset: 2px;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Custom animations */
+@keyframes spin {
   from {
     transform: rotate(0deg);
   }
@@ -70,7 +161,7 @@ text {
   }
 }
 
-@keyframes Logo--shake {
+@keyframes shake {
   0% {
     transform: scale(1);
   }
@@ -82,38 +173,134 @@ text {
   }
 }
 
-.Content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+/* Theme-aware utilities */
+@layer utilities {
+  /* Animation utilities */
+  .animate-spin-slow {
+    animation: spin 20s linear infinite;
+  }
+
+  .animate-shake {
+    animation: shake 0.5s ease infinite;
+  }
+  
+  /* Theme-aware text utilities */
+  .text-theme {
+    color: hsl(var(--text-hsl));
+  }
+  
+  .text-theme-secondary {
+    color: hsl(var(--text-secondary-hsl));
+  }
+  
+  /* Theme-aware background utilities */
+  .bg-theme {
+    background-color: hsl(var(--background-hsl));
+  }
+  
+  .bg-surface {
+    background-color: hsl(var(--surface-hsl));
+  }
+  
+  .bg-muted {
+    background-color: hsl(var(--muted-hsl));
+  }
+  
+  /* Theme-aware border utilities */
+  .border-theme {
+    border-color: hsl(var(--border-hsl));
+  }
+  
+  .border-primary {
+    border-color: hsl(var(--primary-hsl));
+  }
+  
+  /* Theme-aware shadow utilities */
+  .shadow-theme {
+    box-shadow: 0 1px 3px 0 hsl(var(--shadow-color) / var(--shadow-opacity)),
+                0 1px 2px -1px hsl(var(--shadow-color) / var(--shadow-opacity));
+  }
+  
+  .shadow-theme-md {
+    box-shadow: 0 4px 6px -1px hsl(var(--shadow-color) / var(--shadow-opacity)),
+                0 2px 4px -2px hsl(var(--shadow-color) / var(--shadow-opacity));
+  }
+  
+  .shadow-theme-lg {
+    box-shadow: 0 10px 15px -3px hsl(var(--shadow-color) / var(--shadow-opacity)),
+                0 4px 6px -4px hsl(var(--shadow-color) / var(--shadow-opacity));
+  }
+  
+  /* Theme transition utilities */
+  .transition-theme {
+    transition-property: background-color, border-color, color, fill, stroke, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: var(--theme-transition-duration);
+  }
+  
+  /* Overlay utilities */
+  .overlay-theme {
+    background-color: hsl(var(--background-hsl) / var(--overlay-opacity));
+  }
 }
 
-.Arrow {
-  width: 24px;
-  height: 24px;
-}
-
-.Title {
-  font-size: 36px;
-  font-weight: 700;
-}
-
-.Subtitle {
-  font-style: italic;
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.Description {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 15rpx;
-}
-
-.Hint {
-  font-size: 12px;
-  margin: 5px;
-  color: rgba(255, 255, 255, 0.65);
+/* Theme-aware components */
+@layer components {
+  /* Custom gradient background (preserved from original) */
+  .bg-gradient-custom {
+    background: radial-gradient(
+      71.43% 62.3% at 46.43% 36.43%,
+      rgba(18, 229, 229, 0) 15%,
+      rgba(239, 155, 255, 0.3) 56.35%,
+      #ff6448 100%
+    );
+    box-shadow: 0px 12.93px 28.74px 0px #ffd28db2 inset;
+  }
+  
+  /* Theme-aware card component */
+  .card-theme {
+    @apply bg-surface border border-theme rounded-lg shadow-theme transition-theme;
+  }
+  
+  /* Theme-aware button variants */
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary/90 focus:bg-primary/90 
+           border border-primary rounded-md px-4 py-2 transition-theme;
+  }
+  
+  .btn-secondary {
+    @apply bg-surface text-theme border border-theme hover:bg-muted 
+           focus:bg-muted rounded-md px-4 py-2 transition-theme;
+  }
+  
+  .btn-ghost {
+    @apply text-theme hover:bg-muted focus:bg-muted 
+           rounded-md px-4 py-2 transition-theme;
+  }
+  
+  /* Theme-aware input component */
+  .input-theme {
+    @apply bg-surface text-theme border border-theme rounded-md px-3 py-2 
+           focus:border-primary transition-theme;
+    outline: none;
+  }
+  
+  /* Theme-aware gradient backgrounds */
+  .bg-gradient-theme {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary-hsl) / 0.1) 0%,
+      hsl(var(--secondary-hsl) / 0.05) 50%,
+      hsl(var(--accent-hsl) / 0.1) 100%
+    );
+  }
+  
+  .bg-gradient-theme-vibrant {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary-hsl)) 0%,
+      hsl(var(--secondary-hsl)) 50%,
+      hsl(var(--accent-hsl)) 100%
+    );
+  }
 }
